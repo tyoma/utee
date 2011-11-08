@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "youtee.tests", "youtee.tests.vcxproj", "{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utee.tests", "utee.tests.vcxproj", "{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "youtee", "youtee.vcxproj", "{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utee", "utee.vcxproj", "{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

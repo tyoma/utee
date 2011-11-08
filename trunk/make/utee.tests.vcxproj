@@ -98,7 +98,7 @@
     <ClCompile Include="..\tests\TestExecutionEngineTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="youtee.vcxproj">
+    <ProjectReference Include="utee.vcxproj">
       <Project>{4db73ace-2d47-4a6c-8213-2be191dd921f}</Project>
     </ProjectReference>
   </ItemGroup>
