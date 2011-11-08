@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "youtee.tests", "youtee.tests.vcxproj", "{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "youtee", "youtee.vcxproj", "{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}.Debug|Win32.Build.0 = Debug|Win32
+		{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}.Release|Win32.ActiveCfg = Release|Win32
+		{31060DFE-915C-4CD0-BCD9-B5A82DBE31BD}.Release|Win32.Build.0 = Release|Win32
+		{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}.Debug|Win32.Build.0 = Debug|Win32
+		{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}.Release|Win32.ActiveCfg = Release|Win32
+		{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
