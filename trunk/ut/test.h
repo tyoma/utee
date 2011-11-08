@@ -18,8 +18,8 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //	THE SOFTWARE.
 
-#ifndef __YOUTEE_UT_TEST__
-#define __YOUTEE_UT_TEST__
+#ifndef __UTEE_UT_TEST__
+#define __UTEE_UT_TEST__
 
 #ifdef USE_MSVCQT
 
@@ -41,4 +41,4 @@ public:
 
 #endif	// USE_MSVCQT
 
-#endif	// __YOUTEE_UT_TEST__
+#endif	// __UTEE_UT_TEST__

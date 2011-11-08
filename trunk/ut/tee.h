@@ -18,16 +18,40 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //	THE SOFTWARE.
 
-#ifndef __YOUTEE_UT_TEE__
-#define __YOUTEE_UT_TEE__
+#ifndef __UTEE_UT_TEE__
+#define __UTEE_UT_TEE__
+
+#include <set>
+#include <functional>
 
 namespace ut
 {
+	struct type_info_less : std::binary_function<const type_info *, const type_info *, bool>
+	{
+		bool operator ()(const type_info *lhs, const type_info *rhs) const;
+	};
+
 	class tee
 	{
+		std::set<const type_info *, type_info_less> _suites;
+
 	public:
 		int suites_count() const;
+
+		template <typename FixtureT>
+		void add_test(void (FixtureT::*method)());
 	};
+
+
+	inline bool type_info_less::operator ()(const type_info *lhs, const type_info *rhs) const
+	{	return !!lhs->before(*rhs);	}
+
+
+	template <typename FixtureT>
+	inline void tee::add_test(void (FixtureT::*method)())
+	{
+		_suites.insert(&typeid(FixtureT));
+	}
 }
 
-#endif	// __YOUTEE_UT_TEE__
+#endif	// __UTEE_UT_TEE__
