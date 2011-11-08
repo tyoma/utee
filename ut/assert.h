@@ -18,22 +18,26 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //	THE SOFTWARE.
 
-#ifndef __YOUTEE_UT_ASSERT__
-#define __YOUTEE_UT_ASSERT__
+#ifndef __UTEE_UT_ASSERT__
+#define __UTEE_UT_ASSERT__
 
 namespace ut
 {
 #ifdef USE_MSVCQT
 
 template <typename T1, typename T2>
-void are_equal(const T1 &lhs, const T2 &rhs)
-{
-	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(lhs == rhs);
-}
+inline void are_equal(const T1 &lhs, const T2 &rhs)
+{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(lhs == rhs);	}
+
+inline void is_true(bool value)
+{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(value);	}
+
+inline void is_false(bool value)
+{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsFalse(value);	}
 
 #else	// USE_MSVCQT
 
 #endif	// USE_MSVCQT
 }
 
-#endif	// __YOUTEE_UT_ASSERT__
+#endif	// __UTEE_UT_ASSERT__
