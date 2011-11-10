@@ -35,7 +35,7 @@ namespace ut
 
 	public:
 		explicit shared_ptr(T *p = 0);
-		shared_ptr(const shared_ptr &other);
+		shared_ptr(const shared_ptr &other) throw();
 		~shared_ptr() throw();
 
 		T *operator ->() const;
@@ -53,7 +53,7 @@ namespace ut
 	}
 
 	template <typename T>
-	inline shared_ptr<T>::shared_ptr(const shared_ptr &other)
+	inline shared_ptr<T>::shared_ptr(const shared_ptr &other) throw()
 		: _p(other._p), _refs(other._refs)
 	{
 		if (_p)
