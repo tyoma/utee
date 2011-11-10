@@ -31,6 +31,7 @@ namespace ut
 		T *_p;
 		ref_counter_t *_refs;
 
+		void assign(T *p, ref_counter_t *refs) throw();
 		void release() throw();
 
 	public:
@@ -46,19 +47,11 @@ namespace ut
 
 	template <typename T>
 	inline shared_ptr<T>::shared_ptr(T *p)
-		: _p(p), _refs(p ? new ref_counter_t() : 0)
-	{
-		if (_p)
-			++*_refs;
-	}
+	{	assign(p, p ? new ref_counter_t() : 0);	}
 
 	template <typename T>
 	inline shared_ptr<T>::shared_ptr(const shared_ptr &other) throw()
-		: _p(other._p), _refs(other._refs)
-	{
-		if (_p)
-			++*_refs;
-	}
+	{	assign(other._p, other._refs);	}
 
 	template <typename T>
 	inline shared_ptr<T>::~shared_ptr() throw()
@@ -76,13 +69,16 @@ namespace ut
 	inline const shared_ptr<T> &shared_ptr<T>::operator =(const shared_ptr &rhs) throw()
 	{
 		if (this != &rhs)
-		{
-			release();
-			_p = rhs._p, _refs = rhs._refs;
-			if (_p)
-				++*_refs;
-		}
+			release(), assign(rhs._p, rhs._refs);
 		return *this;
+	}
+
+	template <typename T>
+	inline void shared_ptr<T>::assign(T *p, ref_counter_t *refs) throw()
+	{
+		_p = p, _refs = refs;
+		if (_p)
+			++*_refs;
 	}
 
 	template <typename T>
