@@ -10,6 +10,9 @@
     <ClInclude Include="..\ut\test.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ut\sp.h">
+      <Filter>Library Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library Header Files">
