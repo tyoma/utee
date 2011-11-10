@@ -82,6 +82,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\ut\assert.h" />
+    <ClInclude Include="..\ut\sp.h" />
     <ClInclude Include="..\ut\tee.h" />
     <ClInclude Include="..\ut\test.h" />
   </ItemGroup>
