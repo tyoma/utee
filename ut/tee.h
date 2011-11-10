@@ -21,14 +21,34 @@
 #ifndef __UTEE_UT_TEE__
 #define __UTEE_UT_TEE__
 
-#include <set>
 #include <functional>
+#include <set>
+#include <string>
 
 namespace ut
 {
 	struct type_info_less : std::binary_function<const type_info *, const type_info *, bool>
 	{
 		bool operator ()(const type_info *lhs, const type_info *rhs) const;
+	};
+
+	struct test_result
+	{
+		bool passed;
+		std::string outcome;
+	};
+
+	struct test_case
+	{
+		virtual ~test_case()	{	}
+		virtual std::string name() const = 0;
+		virtual test_result execute() = 0;
+	};
+
+	struct fixture
+	{
+		virtual ~fixture() {	}
+		virtual std::string name() const = 0;
 	};
 
 	class tee
