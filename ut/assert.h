@@ -29,6 +29,10 @@ template <typename T1, typename T2>
 inline void are_equal(const T1 &lhs, const T2 &rhs)
 {	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(lhs == rhs);	}
 
+template <typename T1, typename T2>
+inline void are_not_equal(const T1 &lhs, const T2 &rhs)
+{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsFalse(lhs == rhs);	}
+
 inline void is_true(bool value)
 {	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(value);	}
 

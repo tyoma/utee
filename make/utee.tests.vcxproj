@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\tests\MiscTests.cpp" />
+    <ClCompile Include="..\tests\TestCaseTests.cpp" />
     <ClCompile Include="..\tests\TestExecutionEngineTests.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,8 @@
 #ifndef __UTEE_UT_TEE__
 #define __UTEE_UT_TEE__
 
+#include "sp.h"
+
 #include <functional>
 #include <set>
 #include <string>
@@ -41,6 +43,7 @@ namespace ut
 	struct test_case
 	{
 		virtual ~test_case()	{	}
+		virtual std::string fixture_name() const = 0;
 		virtual std::string name() const = 0;
 		virtual test_result execute() = 0;
 	};
@@ -49,6 +52,8 @@ namespace ut
 	{
 		virtual ~fixture() {	}
 		virtual std::string name() const = 0;
+		virtual int test_cases_count() const = 0;
+		virtual shared_ptr<test_case> get_test(int i) const = 0;
 	};
 
 	class tee
@@ -57,6 +62,7 @@ namespace ut
 
 	public:
 		int suites_count() const;
+		shared_ptr<fixture> get_fixture(int i) const;
 
 		template <typename FixtureT>
 		void add_test(void (FixtureT::*method)());
