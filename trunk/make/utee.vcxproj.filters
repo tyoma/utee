@@ -13,6 +13,9 @@
     <ClInclude Include="..\ut\sp.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ut\test_case.h">
+      <Filter>Library Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library Header Files">
