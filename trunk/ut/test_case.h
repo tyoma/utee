@@ -32,18 +32,23 @@ namespace ut
 	template <typename Fixture>
 	class test_case_impl : public test_case
 	{
-		typedef void (Fixture::*test_method_t)();
+		typedef void (Fixture::*_method_t)();
+		typedef std::vector<_method_t> _methods_list_t;
+		typedef shared_ptr<_methods_list_t> _methods_ptr_t;
 		
-		const test_method_t _method;
+		const _method_t _method;
 		const std::string _name;
+		_methods_ptr_t _initializers;
+
+		const test_case_impl &operator =(const test_case_impl &rhs);
 
 	public:
-		typedef std::vector<void (Fixture::*)()> methods_list_t;
+		typedef _method_t method_t;
+		typedef _methods_list_t methods_list_t;
+		typedef _methods_ptr_t methods_ptr_t;
 
 	public:
-		test_case_impl(test_method_t method, const std::string &name,
-			shared_ptr<methods_list_t> initializers = shared_ptr<methods_list_t>(),
-			shared_ptr<methods_list_t> terminators = shared_ptr<methods_list_t>());
+		test_case_impl(method_t method, const std::string &name, methods_ptr_t initializers, methods_ptr_t terminators);
 
 		virtual std::string fixture_name() const;
 		virtual std::string name() const;
@@ -52,9 +57,9 @@ namespace ut
 
 
 	template <typename Fixture>
-	inline test_case_impl<Fixture>::test_case_impl(test_method_t method, const std::string &name,
-		shared_ptr<methods_list_t> initializers, shared_ptr<methods_list_t> terminators)
-		: _method(method), _name(name)
+	inline test_case_impl<Fixture>::test_case_impl(method_t method, const std::string &name,
+		methods_ptr_t initializers, methods_ptr_t terminators)
+		: _method(method), _name(name), _initializers(initializers)
 	{	}
 
 	template <typename Fixture>
@@ -73,6 +78,9 @@ namespace ut
 		try
 		{
 			Fixture f;
+
+			for (_methods_list_t::const_iterator i = _initializers->begin(); i != _initializers->end(); ++i)
+				(f.**i)();
 
 			(f.*_method)();
 			r.passed = true;
