@@ -13,6 +13,8 @@ namespace ut
 		class A	{	};
 		class B	{	};
 		class C	{	};
+		class D : public A	{	};
+		class E : public D	{	};
 
 		template <typename X>
 		class DtorMarker
@@ -321,6 +323,69 @@ namespace ut
 				// ASSERT
 				is_false(destroyed_1);
 				is_false(destroyed_2);
+			}
+
+
+			test(CopySharedPtrWithUpcast)
+			{
+				// INIT
+				shared_ptr<D> pd(new D);
+				shared_ptr<E> pe(new E);
+
+				// ACT
+				shared_ptr<A> copy_pad(pd);
+				shared_ptr<A> copy_pae(pe);
+				shared_ptr<D> copy_pde(pe);
+
+				// ASSERT
+				are_equal(&*pd, &*copy_pad);
+				are_equal(&*pe, &*copy_pae);
+				are_equal(&*pe, &*copy_pde);
+			}
+
+
+			test(CopySharedPtrMakingConst)
+			{
+				// INIT
+				shared_ptr<D> pd(new D);
+				shared_ptr<E> pe(new E);
+
+				// ACT
+				shared_ptr<const D> copy_pconstd(pd);
+				shared_ptr<const E> copy_pconste(pe);
+				shared_ptr<const A> copy_pconstad(pd);
+				shared_ptr<const A> copy_pconstae(pe);
+				shared_ptr<const D> copy_pconstde(pe);
+
+				// ASSERT
+				are_equal(&*pd, &*copy_pconstd);
+				are_equal(&*pe, &*copy_pconste);
+				are_equal(&*pd, &*copy_pconstad);
+				are_equal(&*pe, &*copy_pconstae);
+				are_equal(&*pe, &*copy_pconstde);
+			}
+
+
+			test(MakingATypeSafeCastCopyPreventsFromDestructionWhileCopyIsAliveWith)
+			{
+				// INIT
+				bool destroyed = false;
+				std::auto_ptr< shared_ptr<DtorMarkerA> > ppa(new shared_ptr<DtorMarkerA>(new DtorMarkerA(destroyed)));
+
+				// ACT
+				{
+					shared_ptr<const DtorMarkerA> copy_pa(*ppa);
+
+					ppa.reset();
+
+				// ASSERT
+					is_false(destroyed);
+
+				// ACT (going out of scope)
+				}
+
+				// ASSERT
+				is_true(destroyed);
 			}
 		end_test_suite
 	}

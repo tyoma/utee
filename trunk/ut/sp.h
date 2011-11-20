@@ -26,6 +26,9 @@ namespace ut
 	template <typename T>
 	class shared_ptr
 	{
+		template <typename OtherT>
+		friend class shared_ptr;
+
 		typedef unsigned int ref_counter_t;
 
 		T *_p;
@@ -37,6 +40,8 @@ namespace ut
 	public:
 		explicit shared_ptr(T *p = 0);
 		shared_ptr(const shared_ptr &other) throw();
+		template <typename OtherT>
+		shared_ptr(const shared_ptr<OtherT> &other) throw();
 		~shared_ptr() throw();
 
 		T *operator ->() const;
@@ -51,6 +56,11 @@ namespace ut
 
 	template <typename T>
 	inline shared_ptr<T>::shared_ptr(const shared_ptr &other) throw()
+	{	assign(other._p, other._refs);	}
+
+	template <typename T>
+	template <typename OtherT>
+	inline shared_ptr<T>::shared_ptr(const shared_ptr<OtherT> &other) throw()
 	{	assign(other._p, other._refs);	}
 
 	template <typename T>

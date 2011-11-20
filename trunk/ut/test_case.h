@@ -22,13 +22,26 @@
 #define __UTEE_UT_TEST_CASE__
 
 #include "sp.h"
-#include "tee.h"
 
 #include <string>
 #include <vector>
 
 namespace ut
 {
+	struct test_result
+	{
+		bool passed;
+		std::string outcome;
+	};
+
+	struct test_case
+	{
+		virtual ~test_case()	{	}
+		virtual std::string fixture_name() const = 0;
+		virtual std::string name() const = 0;
+		virtual test_result execute() = 0;
+	};
+
 	template <typename Fixture>
 	class test_case_impl : public test_case
 	{
