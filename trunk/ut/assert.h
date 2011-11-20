@@ -41,6 +41,20 @@ inline void is_false(bool value)
 
 #else	// USE_MSVCQT
 
+template <typename T1, typename T2>
+inline void are_equal(const T1 &/*lhs*/, const T2 &/*rhs*/)
+{	}
+
+template <typename T1, typename T2>
+inline void are_not_equal(const T1 &/*lhs*/, const T2 &/*rhs*/)
+{	}
+
+inline void is_true(bool /*value*/)
+{	}
+
+inline void is_false(bool /*value*/)
+{	}
+
 #endif	// USE_MSVCQT
 }
 
