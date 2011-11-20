@@ -48,7 +48,7 @@ namespace ut
 	};
 
 
-	extern tee g_tee;
+	tee &tee_instance();
 
 	template <class FixtureT, void (FixtureT::*metadata_provider(const char *&))()>
 	inline test_case_registrar<FixtureT, metadata_provider>::test_case_registrar()
@@ -58,7 +58,7 @@ namespace ut
 		const char *name = 0;
 		test_case_method_t method = metadata_provider(name);
 
-		g_tee.add_test<FixtureT>(method, name);
+		tee_instance().add_test<FixtureT>(method, name);
 	}
 }
 
