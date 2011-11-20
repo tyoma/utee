@@ -30,7 +30,10 @@ namespace ut
 {
 	struct test_result
 	{
-		bool passed;
+		bool initialized : 1;
+		bool passed : 1;
+		bool terminated : 1;
+
 		std::string outcome;
 	};
 
@@ -86,7 +89,7 @@ namespace ut
 	template <typename Fixture>
 	inline test_result test_case_impl<Fixture>::execute()
 	{
-		test_result r = { false };
+		test_result r = { false, false, false };
 
 		try
 		{
