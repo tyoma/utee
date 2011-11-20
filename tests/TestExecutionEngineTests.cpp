@@ -166,6 +166,60 @@ namespace ut
 				are_equal("FOO foo", TestClass2_foo->name());
 			}
 
+
+			test(TestCaseAdditionOrderIsPreserved)
+			{
+				// INIT
+				tee t1, t2;
+
+				// ACT
+				t1.add_test(&TestClass1::foo, "foo");
+				t1.add_test(&TestClass1::bar, "bar");
+				t1.add_test(&TestClass2::foo, "FOO foo");
+				t2.add_test(&TestClass2::foo, "FOO foo");
+				t2.add_test(&TestClass1::foo, "foo");
+
+				// ACT / ASSERT
+				are_not_equal(string::npos, (*(t1.tests_begin() + 0))->fixture_name().find("TestClass1"));
+				are_equal("foo", (*(t1.tests_begin() + 0))->name());
+				are_not_equal(string::npos, (*(t1.tests_begin() + 1))->fixture_name().find("TestClass1"));
+				are_equal("bar", (*(t1.tests_begin() + 1))->name());
+				are_not_equal(string::npos, (*(t1.tests_begin() + 2))->fixture_name().find("TestClass2"));
+				are_equal("FOO foo", (*(t1.tests_begin() + 2))->name());
+
+				are_not_equal(string::npos, (*(t2.tests_begin() + 0))->fixture_name().find("TestClass2"));
+				are_equal("FOO foo", (*(t2.tests_begin() + 0))->name());
+				are_not_equal(string::npos, (*(t2.tests_begin() + 1))->fixture_name().find("TestClass1"));
+				are_equal("foo", (*(t2.tests_begin() + 1))->name());
+			}
+
+
+			test(TestsAreOnlyAddedOnceBasedOnTypeAndName)
+			{
+				// INIT
+				tee t1, t2;
+
+				// ACT
+				t1.add_test(&TestClass1::foo, "foo");
+				t1.add_test(&TestClass1::bar, "bar");
+				t1.add_test(&TestClass1::foo, "foo");
+				t2.add_test(&TestClass2::foo, "FOO foo");
+				t2.add_test(&TestClass2::foo, "FOO foo");
+
+
+				// ACT / ASSERT
+				are_equal(2, t1.tests_count());
+				are_equal(2, distance(t1.tests_begin(), t1.tests_end()));
+				are_not_equal(string::npos, (*(t1.tests_begin() + 0))->fixture_name().find("TestClass1"));
+				are_equal("foo", (*(t1.tests_begin() + 0))->name());
+				are_not_equal(string::npos, (*(t1.tests_begin() + 1))->fixture_name().find("TestClass1"));
+				are_equal("bar", (*(t1.tests_begin() + 1))->name());
+
+				are_equal(1, t2.tests_count());
+				are_equal(1, distance(t2.tests_begin(), t2.tests_end()));
+				are_not_equal(string::npos, (*(t2.tests_begin() + 0))->fixture_name().find("TestClass2"));
+				are_equal("FOO foo", (*(t2.tests_begin() + 0))->name());
+			}
 		end_test_suite
 	}
 }
