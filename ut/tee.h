@@ -22,10 +22,12 @@
 #define __UTEE_UT_TEE__
 
 #include "sp.h"
+#include "test_case.h"
 
 #include <functional>
 #include <set>
 #include <string>
+#include <vector>
 
 namespace ut
 {
@@ -34,38 +36,22 @@ namespace ut
 		bool operator ()(const type_info *lhs, const type_info *rhs) const;
 	};
 
-	struct test_result
-	{
-		bool passed;
-		std::string outcome;
-	};
-
-	struct test_case
-	{
-		virtual ~test_case()	{	}
-		virtual std::string fixture_name() const = 0;
-		virtual std::string name() const = 0;
-		virtual test_result execute() = 0;
-	};
-
-	struct fixture
-	{
-		virtual ~fixture() {	}
-		virtual std::string name() const = 0;
-		virtual int test_cases_count() const = 0;
-		virtual shared_ptr<test_case> get_test(int i) const = 0;
-	};
-
 	class tee
 	{
+		std::vector< shared_ptr<test_case> > _test_cases;
 		std::set<const type_info *, type_info_less> _suites;
 
 	public:
-		int suites_count() const;
-		shared_ptr<fixture> get_fixture(int i) const;
+		typedef std::vector< shared_ptr<test_case> >::const_iterator const_iterator;
 
+	public:
 		template <typename FixtureT>
-		void add_test(void (FixtureT::*method)());
+		void add_test(void (FixtureT::*method)(), const char *name);
+
+		int suites_count() const;
+		int tests_count() const;
+		const_iterator tests_begin() const;
+		const_iterator tests_end() const;
 	};
 
 
@@ -74,9 +60,15 @@ namespace ut
 
 
 	template <typename FixtureT>
-	inline void tee::add_test(void (FixtureT::*method)())
+	inline void tee::add_test(void (FixtureT::*method)(), const char *name)
 	{
+		typedef test_case_impl<FixtureT> test_case;
+		typedef typename test_case_impl<FixtureT>::methods_list_t methods_list_t;
+		typedef typename test_case_impl<FixtureT>::methods_ptr_t methods_ptr_t;
+
 		_suites.insert(&typeid(FixtureT));
+		_test_cases.push_back(shared_ptr<test_case>(new test_case_impl<FixtureT>(method, name,
+			methods_ptr_t(new methods_list_t()), methods_ptr_t(new methods_list_t()))));
 	}
 }
 

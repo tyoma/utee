@@ -2,6 +2,9 @@
 
 #include <ut/assert.h>
 #include <ut/test.h>
+#include <iterator>
+
+using namespace std;
 
 namespace ut
 {
@@ -56,7 +59,7 @@ namespace ut
 				tee t;
 
 				// ACT
-				t.add_test(&TestClass1::foo);
+				t.add_test(&TestClass1::foo, "");
 
 				// ASSERT
 				are_equal(1, t.suites_count());
@@ -69,7 +72,7 @@ namespace ut
 				tee t1, t2;
 
 				// ACT
-				t1.add_test(&TestClass1::foo);
+				t1.add_test(&TestClass1::foo, "");
 
 				// ASSERT
 				are_equal(1, t1.suites_count());
@@ -83,8 +86,8 @@ namespace ut
 				tee t;
 
 				// ACT
-				t.add_test(&TestClass1::foo);
-				t.add_test(&TestClass1::bar);
+				t.add_test(&TestClass1::foo, "");
+				t.add_test(&TestClass1::bar, "");
 
 				// ASSERT
 				are_equal(1, t.suites_count());
@@ -97,20 +100,72 @@ namespace ut
 				tee t;
 
 				// ACT
-				t.add_test(&TestClass1::foo);
-				t.add_test(&TestClass2::foo);
+				t.add_test(&TestClass1::foo, "");
+				t.add_test(&TestClass2::foo, "");
 
 				// ASSERT
 				are_equal(2, t.suites_count());
 
 				// ACT
-				t.add_test(&TestClass3::foo);
+				t.add_test(&TestClass3::foo, "");
 
 				// ASSERT
 				are_equal(3, t.suites_count());
 			}
 
-						
+
+			test(TestCasesListIsEmptyAtConstruction)
+			{
+				// INIT
+				tee t;
+
+				// ACT / ASSERT
+				are_equal(0, t.tests_count());
+				are_equal(0, distance(t.tests_begin(), t.tests_begin()));
+			}
+
+
+			test(AddingTestCasesMakesTestsListNonEmpty)
+			{
+				// INIT
+				tee t1, t2;
+
+				// ACT
+				t1.add_test(&TestClass1::foo, "");
+				t2.add_test(&TestClass1::bar, "");
+				t2.add_test(&TestClass2::foo, "");
+
+				// ACT / ASSERT
+				are_equal(1, t1.tests_count());
+				are_equal(1, distance(t1.tests_begin(), t1.tests_end()));
+				are_equal(2, t2.tests_count());
+				are_equal(2, distance(t2.tests_begin(), t2.tests_end()));
+			}
+
+
+			test(AddingTestCasesRevealsThemInTee)
+			{
+				// INIT
+				tee t1, t2, t3;
+
+				// ACT
+				t1.add_test(&TestClass1::foo, "foo");
+				t2.add_test(&TestClass1::bar, "bar");
+				t3.add_test(&TestClass2::foo, "FOO foo");
+
+				shared_ptr<test_case> TestClass1_foo = *t1.tests_begin();
+				shared_ptr<test_case> TestClass1_bar = *t2.tests_begin();
+				shared_ptr<test_case> TestClass2_foo = *t3.tests_begin();
+
+				// ACT / ASSERT
+				are_not_equal(string::npos, TestClass1_foo->fixture_name().find("TestClass1"));
+				are_equal("foo", TestClass1_foo->name());
+				are_not_equal(string::npos, TestClass1_bar->fixture_name().find("TestClass1"));
+				are_equal("bar", TestClass1_bar->name());
+				are_not_equal(string::npos, TestClass2_foo->fixture_name().find("TestClass2"));
+				are_equal("FOO foo", TestClass2_foo->name());
+			}
+
 		end_test_suite
 	}
 }
