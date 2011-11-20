@@ -2,7 +2,12 @@
 
 namespace ut
 {
-	tee g_tee;
+	tee &tee_instance()
+	{
+		static tee g_instance;
+
+		return g_instance;
+	}
 
 	int tee::suites_count() const
 	{	return _suites.size();	}
