@@ -39,6 +39,7 @@ namespace ut
 	class tee
 	{
 		std::vector< shared_ptr<test_case> > _test_cases;
+		std::set<std::string> _test_case_names;
 		std::set<const type_info *, type_info_less> _suites;
 
 	public:
@@ -67,8 +68,12 @@ namespace ut
 		typedef typename test_case_impl<FixtureT>::methods_ptr_t methods_ptr_t;
 
 		_suites.insert(&typeid(FixtureT));
-		_test_cases.push_back(shared_ptr<test_case>(new test_case_impl<FixtureT>(method, name,
-			methods_ptr_t(new methods_list_t()), methods_ptr_t(new methods_list_t()))));
+
+		shared_ptr<test_case> t(new test_case_impl<FixtureT>(method, name, methods_ptr_t(new methods_list_t()),
+			methods_ptr_t(new methods_list_t())));
+		
+		if (_test_case_names.insert(t->fixture_name() + t->name()).second)
+			_test_cases.push_back(t);
 	}
 }
 
