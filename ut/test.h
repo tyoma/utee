@@ -37,7 +37,47 @@ public:
 
 #else	// USE_MSVCQT
 
+#include "tee.h"
 
+namespace ut
+{
+	template <class FixtureT, void (FixtureT::*metadata_provider(const char *&))()>
+	struct test_case_registrar
+	{
+		test_case_registrar();
+	};
+
+
+	extern tee g_tee;
+
+	template <class FixtureT, void (FixtureT::*metadata_provider(const char *&))()>
+	inline test_case_registrar<FixtureT, metadata_provider>::test_case_registrar()
+	{
+		typedef void (FixtureT::*test_case_method_t)();
+
+		const char *name = 0;
+		test_case_method_t method = metadata_provider(name);
+
+		g_tee.add_test<FixtureT>(method, name);
+	}
+}
+
+#define begin_test_suite(__test_suite)\
+namespace	{\
+	class __test_suite\
+	{\
+		typedef __test_suite this_suite_class;\
+	public:
+
+#define test(__test)\
+		static void (this_suite_class::*__##__test##_meta(const char *&name))()\
+		{	return name = #__test, &this_suite_class::__test;	}\
+		ut::test_case_registrar<this_suite_class, &this_suite_class::__##__test##_meta>	__##__test##_registrar;\
+		void __test()
+
+#define end_test_suite\
+	} g_suite;\
+}
 
 #endif	// USE_MSVCQT
 

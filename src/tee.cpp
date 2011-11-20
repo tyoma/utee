@@ -2,6 +2,8 @@
 
 namespace ut
 {
+	tee g_tee;
+
 	int tee::suites_count() const
 	{	return _suites.size();	}
 
