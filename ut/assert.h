@@ -1,61 +1,124 @@
-//	Copyright (C) 2011 by Artem A. Gevorkyan (gevorkyan.org)
-//
-//	Permission is hereby granted, free of charge, to any person obtaining a copy
-//	of this software and associated documentation files (the "Software"), to deal
-//	in the Software without restriction, including without limitation the rights
-//	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//	copies of the Software, and to permit persons to whom the Software is
-//	furnished to do so, subject to the following conditions:
-//
-//	The above copyright notice and this permission notice shall be included in
-//	all copies or substantial portions of the Software.
-//
-//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//	THE SOFTWARE.
+#pragma once
 
-#ifndef __UTEE_UT_ASSERT__
-#define __UTEE_UT_ASSERT__
+#include <algorithm>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace ut
 {
-#ifdef USE_MSVCQT
+	class LocationInfo
+	{
+		const LocationInfo &operator =(const LocationInfo &rhs);
 
-template <typename T1, typename T2>
-inline void are_equal(const T1 &lhs, const T2 &rhs)
-{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(lhs == rhs);	}
+	public:
+		LocationInfo(const std::string &i_filename, int i_line);
 
-template <typename T1, typename T2>
-inline void are_not_equal(const T1 &lhs, const T2 &rhs)
-{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsFalse(lhs == rhs);	}
+		const std::string filename;
+		const int line;
+	};
 
-inline void is_true(bool value)
-{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsTrue(value);	}
+	class FailedAssertion : public std::logic_error
+	{
+		static std::string ComposeMessage(const std::string &message, const LocationInfo &i_location);
 
-inline void is_false(bool value)
-{	Microsoft::VisualStudio::TestTools::UnitTesting::Assert::IsFalse(value);	}
+	public:
+		FailedAssertion(const std::string &message, const LocationInfo &i_location);
+		virtual ~FailedAssertion() throw();
 
-#else	// USE_MSVCQT
+		LocationInfo location;
+	};
 
-template <typename T1, typename T2>
-inline void are_equal(const T1 &/*lhs*/, const T2 &/*rhs*/)
-{	}
 
-template <typename T1, typename T2>
-inline void are_not_equal(const T1 &/*lhs*/, const T2 &/*rhs*/)
-{	}
+	template <typename T1, typename T2>
+	inline void are_equal(const T1 &i_lhs, const T2 &i_rhs, const LocationInfo &i_location)
+	{
+		if (!(i_lhs == i_rhs))
+			throw FailedAssertion("Values are not equal!", i_location);
+	}
 
-inline void is_true(bool /*value*/)
-{	}
+	template <typename T1, size_t n, typename T2>
+	inline void content_equal(T1 (&i_lhs)[n], const T2 &i_rhs, const LocationInfo &location)
+	{	are_equal(std::vector<typename T2::value_type>(i_lhs, i_lhs + n), i_rhs, location);	}
 
-inline void is_false(bool /*value*/)
-{	}
+	template <typename T1, typename T2, size_t n>
+	inline void content_equal(T1 (&i_lhs)[n], T2 (&i_rhs)[n], const LocationInfo &location)
+	{	are_equal(std::vector<T2>(i_lhs, i_lhs + n), std::vector<T2>(i_rhs, i_rhs + n), location);	}
 
-#endif	// USE_MSVCQT
+	template <typename T1, typename T2>
+	inline void are_not_equal(const T1 &i_lhs, const T2 &i_rhs, const LocationInfo &i_location)
+	{
+		if (!(i_lhs != i_rhs))
+			throw FailedAssertion("Values are equal!", i_location);
+	}
+
+	template <typename T1, typename T2>
+	inline void are_equivalent(const T1& i_reference, const T2& i_actual, const LocationInfo &i_location)
+	{
+		using namespace std;
+
+		vector<typename T1::value_type> reference(i_reference.begin(), i_reference.end());
+		vector<typename T2::value_type> actual(i_actual.begin(), i_actual.end());
+
+		sort(reference.begin(), reference.end());
+		sort(actual.begin(), actual.end());
+		if (lexicographical_compare(reference.begin(), reference.end(), actual.begin(), actual.end())
+			!= lexicographical_compare(actual.begin(), actual.end(), reference.begin(), reference.end()))
+			throw FailedAssertion("The sets are not equivalent!", i_location);
+	}
+
+	template <typename T1, size_t n, typename T2>
+	inline void are_equivalent(T1 (&i_reference)[n], const T2& i_actual, const LocationInfo &i_location)
+	{
+		are_equivalent(std::vector<T1>(i_reference, i_reference + n), i_actual, i_location);
+	}
+
+	inline void is_true(bool i_value, const LocationInfo &i_location)
+	{
+		if (!i_value)
+			throw FailedAssertion("Value is not 'true'!", i_location);
+	}
+
+	inline void is_false(bool i_value, const LocationInfo &i_location)
+	{
+		if (i_value)
+			throw FailedAssertion("Value is not 'false'!", i_location);
+	}
+
+	template <typename T>
+	inline void is_empty(const T& i_container, const LocationInfo &i_location)
+	{
+		if (!i_container.empty())
+			throw FailedAssertion("The container is not empty!", i_location);
+	}
+
+	template <typename T>
+	inline void is_null(const T &i_value, const LocationInfo &i_location)
+	{
+		if (!(i_value == NULL))
+			throw FailedAssertion("Value is not null!", i_location);
+	}
+
+	template <typename T>
+	inline void is_not_null(const T &i_value, const LocationInfo &i_location)
+	{
+		if (!(i_value != NULL))
+			throw FailedAssertion("Value is null!", i_location);
+	}
 }
 
-#endif	// __UTEE_UT_ASSERT__
+#define assert_equal(_mp_lhs, _mp_rhs)  ut::are_equal(_mp_lhs, _mp_rhs, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_content_equal(_mp_lhs, _mp_rhs)  ut::content_equal(_mp_lhs, _mp_rhs, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_equivalent(_mp_reference, _mp_actual)  ut::are_equivalent(_mp_reference, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_not_equal(_mp_lhs, _mp_rhs)  ut::are_not_equal(_mp_lhs, _mp_rhs, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_is_true(_mp_value)  ut::is_true(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_is_false(_mp_value)  ut::is_false(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_is_empty(_mp_container)  ut::is_empty(_mp_container, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_null(_mp_value) ut::is_null(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_not_null(_mp_value) ut::is_not_null(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
+
+#define assert_throws(_mp_fragment, expected_exception)\
+	try { _mp_fragment; throw ut::FailedAssertion("Expected exception was not thrown!", ut::LocationInfo( __FILE__, __LINE__ )); }\
+	catch (const ut::FailedAssertion &) { throw; }\
+	catch (const expected_exception &) { } \
+	catch (...) { throw ut::FailedAssertion("Exception of unexpected type was thrown!", ut::LocationInfo( __FILE__, __LINE__ )); }

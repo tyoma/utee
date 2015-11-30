@@ -4,16 +4,16 @@
     <ClInclude Include="..\ut\assert.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ut\tee.h">
-      <Filter>Library Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ut\test.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ut\sp.h">
+    <ClInclude Include="..\ut\test_case.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ut\test_case.h">
+    <ClInclude Include="..\ut\exportable.h">
+      <Filter>Library Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ut\registry.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -27,7 +27,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\tee.cpp">
+    <ClCompile Include="..\src\assert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

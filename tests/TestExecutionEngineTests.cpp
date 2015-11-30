@@ -1,4 +1,6 @@
-#include <ut/tee.h>
+#include <ut/registry.h>
+
+#include "helpers.h"
 
 #include <ut/assert.h>
 #include <ut/test.h>
@@ -10,143 +12,126 @@ namespace ut
 {
 	namespace tests
 	{
-		class TestClass1
+		namespace
 		{
-		public:
-			void foo()
+			class TestClass1
 			{
-			}
+			public:
+				static char *__suite_name() {	return "TestClass1";	}
 
-			void bar()
+				void foo()
+				{
+				}
+
+				void bar()
+				{
+				}
+			};
+
+
+			class TestClass2
 			{
-			}
-		};
+			public:
+				static const char *__suite_name() {	return "TestClass2";	}
+
+				void foo()
+				{
+				}
+			};
 
 
-		class TestClass2
-		{
-		public:
-			void foo()
+			class TestClass3
 			{
-			}
-		};
+			public:
+				static const char *__suite_name() {	return "TestClass3";	}
 
-
-		class TestClass3
-		{
-		public:
-			void foo()
-			{
-			}
-		};
-
+				void foo()
+				{
+				}
+			};
+		}
 
 		begin_test_suite(TestExecutionEngineTests)
-			test(TeeDoesNotHaveSuitesByDefault)
+			test( TestsRegistryIsEmptyByDefault )
 			{
 				// INIT
-				tee t;
-				const tee &const_t(t);
+				registry t;
+				const registry &const_t(t);
 
 				// ACT / ASSERT
-				are_equal(0, const_t.suites_count());
+				assert_equal(0, const_t.tests_count());
 			}
 
 
-			test(RegisteringTestChangesSuitesCount)
+			test( RegisteringTestChangesTestsCount )
 			{
 				// INIT
-				tee t;
+				registry t;
 
 				// ACT
 				t.add_test(&TestClass1::foo, "");
 
 				// ASSERT
-				are_equal(1, t.suites_count());
+				assert_equal(1, t.tests_count());
 			}
 
 
-			test(RegisteringTestInOneTeeDoesNotAffectTheOther)
+			test( RegisteringTestsInOneRegistryDoesNotAffectAnother )
 			{
 				// INIT
-				tee t1, t2;
+				registry t1, t2;
 
 				// ACT
 				t1.add_test(&TestClass1::foo, "");
 
 				// ASSERT
-				are_equal(1, t1.suites_count());
-				are_equal(0, t2.suites_count());
+				assert_equal(1, t1.tests_count());
+				assert_equal(0, t2.tests_count());
 			}
 
 
-			test(RegisteringSeveralTestForSameFixtureLeadsToOneTestSuite)
+			test( TestsFromDifferentFixturesAreCountedAsTotal )
 			{
 				// INIT
-				tee t;
+				registry t;
 
 				// ACT
-				t.add_test(&TestClass1::foo, "");
-				t.add_test(&TestClass1::bar, "");
+				t.add_test(&TestClass1::foo, "x");
+				t.add_test(&TestClass1::bar, "y");
 
 				// ASSERT
-				are_equal(1, t.suites_count());
-			}
-
-
-			test(TestSuitesCountEqualsFixturesInvolved)
-			{
-				// INIT
-				tee t;
+				assert_equal(2, t.tests_count());
 
 				// ACT
-				t.add_test(&TestClass1::foo, "");
-				t.add_test(&TestClass2::foo, "");
+				t.add_test(&TestClass3::foo, "z");
 
 				// ASSERT
-				are_equal(2, t.suites_count());
-
-				// ACT
-				t.add_test(&TestClass3::foo, "");
-
-				// ASSERT
-				are_equal(3, t.suites_count());
-			}
-
-
-			test(TestCasesListIsEmptyAtConstruction)
-			{
-				// INIT
-				tee t;
-
-				// ACT / ASSERT
-				are_equal(0, t.tests_count());
-				are_equal(0, distance(t.tests_begin(), t.tests_begin()));
+				assert_equal(3, t.tests_count());
 			}
 
 
 			test(AddingTestCasesMakesTestsListNonEmpty)
 			{
 				// INIT
-				tee t1, t2;
+				registry t1, t2;
 
 				// ACT
-				t1.add_test(&TestClass1::foo, "");
-				t2.add_test(&TestClass1::bar, "");
-				t2.add_test(&TestClass2::foo, "");
+				t1.add_test(&TestClass1::foo, "x");
+				t2.add_test(&TestClass1::bar, "x");
+				t2.add_test(&TestClass2::foo, "y");
 
 				// ACT / ASSERT
-				are_equal(1, t1.tests_count());
-				are_equal(1, distance(t1.tests_begin(), t1.tests_end()));
-				are_equal(2, t2.tests_count());
-				are_equal(2, distance(t2.tests_begin(), t2.tests_end()));
+				assert_equal(1, t1.tests_count());
+				assert_equal(1, distance(t1.tests_begin(), t1.tests_end()));
+				assert_equal(2, t2.tests_count());
+				assert_equal(2, distance(t2.tests_begin(), t2.tests_end()));
 			}
 
 
 			test(AddingTestCasesRevealsThemInTee)
 			{
 				// INIT
-				tee t1, t2, t3;
+				registry t1, t2, t3;
 
 				// ACT
 				t1.add_test(&TestClass1::foo, "foo");
@@ -158,46 +143,53 @@ namespace ut
 				shared_ptr<test_case> TestClass2_foo = *t3.tests_begin();
 
 				// ACT / ASSERT
-				are_not_equal(string::npos, TestClass1_foo->fixture_name().find("TestClass1"));
-				are_equal("foo", TestClass1_foo->name());
-				are_not_equal(string::npos, TestClass1_bar->fixture_name().find("TestClass1"));
-				are_equal("bar", TestClass1_bar->name());
-				are_not_equal(string::npos, TestClass2_foo->fixture_name().find("TestClass2"));
-				are_equal("FOO foo", TestClass2_foo->name());
+				assert_equal("TestClass1", TestClass1_foo->fixture_name());
+				assert_equal("foo", TestClass1_foo->name());
+				assert_equal("TestClass1", TestClass1_bar->fixture_name());
+				assert_equal("bar", TestClass1_bar->name());
+				assert_equal("TestClass2", TestClass2_foo->fixture_name());
+				assert_equal("FOO foo", TestClass2_foo->name());
 			}
 
 
-			test(TestCaseAdditionOrderIsPreserved)
+			test( TestCaseAdditionOrderIsPreserved )
 			{
 				// INIT
-				tee t1, t2;
+				registry t1, t2;
 
 				// ACT
 				t1.add_test(&TestClass1::foo, "foo");
 				t1.add_test(&TestClass1::bar, "bar");
 				t1.add_test(&TestClass2::foo, "FOO foo");
-				t2.add_test(&TestClass2::foo, "FOO foo");
+				t2.add_test(&TestClass2::foo, "FOO baz");
 				t2.add_test(&TestClass1::foo, "foo");
 
 				// ACT / ASSERT
-				are_not_equal(string::npos, (*(t1.tests_begin() + 0))->fixture_name().find("TestClass1"));
-				are_equal("foo", (*(t1.tests_begin() + 0))->name());
-				are_not_equal(string::npos, (*(t1.tests_begin() + 1))->fixture_name().find("TestClass1"));
-				are_equal("bar", (*(t1.tests_begin() + 1))->name());
-				are_not_equal(string::npos, (*(t1.tests_begin() + 2))->fixture_name().find("TestClass2"));
-				are_equal("FOO foo", (*(t1.tests_begin() + 2))->name());
+				registry::const_iterator i = t1.tests_begin();
 
-				are_not_equal(string::npos, (*(t2.tests_begin() + 0))->fixture_name().find("TestClass2"));
-				are_equal("FOO foo", (*(t2.tests_begin() + 0))->name());
-				are_not_equal(string::npos, (*(t2.tests_begin() + 1))->fixture_name().find("TestClass1"));
-				are_equal("foo", (*(t2.tests_begin() + 1))->name());
+				assert_equal("TestClass1", (*i)->fixture_name());
+				assert_equal("foo", (*i)->name());
+				++i;
+				assert_equal("TestClass1", (*i)->fixture_name());
+				assert_equal("bar", (*i)->name());
+				++i;
+				assert_equal("TestClass2", (*i)->fixture_name());
+				assert_equal("FOO foo", (*i)->name());
+
+				i = t2.tests_begin();
+
+				assert_equal("TestClass2", (*i)->fixture_name());
+				assert_equal("FOO baz", (*i)->name());
+				++i;
+				assert_equal("TestClass1", (*i)->fixture_name());
+				assert_equal("foo", (*i)->name());
 			}
 
 
 			test(TestsAreOnlyAddedOnceBasedOnTypeAndName)
 			{
 				// INIT
-				tee t1, t2;
+				registry t1, t2;
 
 				// ACT
 				t1.add_test(&TestClass1::foo, "foo");
@@ -208,17 +200,24 @@ namespace ut
 
 
 				// ACT / ASSERT
-				are_equal(2, t1.tests_count());
-				are_equal(2, distance(t1.tests_begin(), t1.tests_end()));
-				are_not_equal(string::npos, (*(t1.tests_begin() + 0))->fixture_name().find("TestClass1"));
-				are_equal("foo", (*(t1.tests_begin() + 0))->name());
-				are_not_equal(string::npos, (*(t1.tests_begin() + 1))->fixture_name().find("TestClass1"));
-				are_equal("bar", (*(t1.tests_begin() + 1))->name());
+				assert_equal(2, t1.tests_count());
+				assert_equal(2, distance(t1.tests_begin(), t1.tests_end()));
 
-				are_equal(1, t2.tests_count());
-				are_equal(1, distance(t2.tests_begin(), t2.tests_end()));
-				are_not_equal(string::npos, (*(t2.tests_begin() + 0))->fixture_name().find("TestClass2"));
-				are_equal("FOO foo", (*(t2.tests_begin() + 0))->name());
+				registry::const_iterator i = t1.tests_begin();
+
+				assert_equal("TestClass1", (*i)->fixture_name());
+				assert_equal("foo", (*i)->name());
+				++i;
+				assert_equal("TestClass1", (*i)->fixture_name());
+				assert_equal("bar", (*i)->name());
+
+				assert_equal(1, t2.tests_count());
+				assert_equal(1, distance(t2.tests_begin(), t2.tests_end()));
+
+				i = t2.tests_begin();
+
+				assert_equal("TestClass2", (*i)->fixture_name());
+				assert_equal("FOO foo", (*i)->name());
 			}
 		end_test_suite
 	}

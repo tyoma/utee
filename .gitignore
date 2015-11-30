@@ -1,0 +1,8 @@
+*/_*/*
+*/ipch/*
+*/TestResults/*
+*.sdf
+*.opensdf
+*.suo
+*.ncb
+*.user
