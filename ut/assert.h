@@ -37,6 +37,27 @@ namespace ut
 			throw FailedAssertion("Values are not equal!", i_location);
 	}
 
+	template <typename T, size_t n, typename ContainerT>
+	inline void are_equal(T (&i_lhs)[n], const ContainerT &i_rhs, const LocationInfo &i_location)
+	{
+		are_equal(n, static_cast<size_t>(std::distance(i_rhs.begin(), i_rhs.end())), i_location);
+		is_true(std::equal(i_lhs, i_lhs + n, i_rhs.begin()), i_location);
+	}
+
+	template <typename T, size_t n>
+	inline void are_equal(const T (&i_lhs)[n], const std::basic_string<T> &i_rhs, const LocationInfo &i_location)
+	{
+		if (!(i_lhs == i_rhs))
+			throw FailedAssertion("Values are not equal!", i_location);
+	}
+
+	template <typename T1, typename T2, size_t n>
+	inline void are_equal(T1 (&i_lhs)[n], T2 (&i_rhs)[n], const LocationInfo &location)
+	{
+		is_true(std::equal(i_lhs, i_lhs + n, i_rhs), location);
+	}
+
+
 	template <typename T1, size_t n, typename T2>
 	inline void content_equal(T1 (&i_lhs)[n], const T2 &i_rhs, const LocationInfo &location)
 	{	are_equal(std::vector<typename T2::value_type>(i_lhs, i_lhs + n), i_rhs, location);	}
