@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Label="ProjectConfigurations">
+  <ItemGroup Label="ProjectConfigurations" Condition="'$(VisualStudioVersion)'=='10.0'">
     <ProjectConfiguration Include="Debug|Android">
       <Configuration>Debug</Configuration>
       <Platform>Android</Platform>
@@ -28,30 +28,20 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4DB73ACE-2D47-4A6C-8213-2BE191DD921F}</ProjectGuid>
-    <RootNamespace>utee</RootNamespace>
-    <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(SolutionDir)build.props\platform.props" />
   <PropertyGroup Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset Condition="'$(Platform)'=='Android'">arm-linux-androideabi-4.8</PlatformToolset>
   </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="PropertySheets">
     <Import Project="$(SolutionDir)build.props\config.props" Condition="exists('$(SolutionDir)build.props\config.props')" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <OutDir >$(SolutionDir)_lib/$(Configuration)_$(PlatformName)/</OutDir>
-  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions Condition="'$(Platform)'=='Android'">-std=c++11 %(AdditionalOptions)</AdditionalOptions>
-      <GccExceptionHandling Condition="'$(Platform)'=='Android'">true</GccExceptionHandling>
-      <RuntimeTypeInfo Condition="'$(Platform)'=='Android'">true</RuntimeTypeInfo>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -66,6 +56,4 @@
     <ClCompile Include="..\src\registry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
 </Project>

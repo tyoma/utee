@@ -135,7 +135,7 @@ public:\
 	ut::test_case_registrar<this_suite_class, &this_suite_class::__##__test##_meta> __##__test##_registrar;\
 	void __test()
 
-#define ignore(__test)\
+#define ignored_test(__test)\
 	void __test()
 
 #define obsolete_test(__test)

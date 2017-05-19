@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Configuration">
+    <_PropertySheetDisplayName>Utee Configuration Properties</_PropertySheetDisplayName>
+    <IntDir>$(SolutionDir)_obj\$(Configuration)_$(PlatformName)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)_bin\$(Configuration)_$(PlatformName)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalOptions Condition="'$(Platform)'=='Android'">-std=c++11 -fexceptions %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo Condition="'$(Platform)'=='Android'">true</RuntimeTypeInfo>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="$(Configuration.StartsWith('Debug'))">
+    <ClCompile>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <PreprocessorDefinitions>_DEBUG;_SCL_SECURE_NO_WARNINGS;_ITERATOR_DEBUG_LEVEL=2;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="$(Configuration.StartsWith('Release'))">
+    <ClCompile>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <PreprocessorDefinitions>NDEBUG;_SCL_SECURE_NO_WARNINGS;_ITERATOR_DEBUG_LEVEL=0;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

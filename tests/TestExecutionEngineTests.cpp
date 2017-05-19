@@ -2,9 +2,9 @@
 
 #include "helpers.h"
 
+#include <iterator>
 #include <ut/assert.h>
 #include <ut/test.h>
-#include <iterator>
 
 using namespace std;
 
@@ -17,7 +17,7 @@ namespace ut
 			class TestClass1
 			{
 			public:
-				static char *__suite_name() {	return "TestClass1";	}
+				static const char *__suite_name() {	return "TestClass1";	}
 
 				void foo()
 				{
