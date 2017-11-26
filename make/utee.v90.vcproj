@@ -28,7 +28,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="_DEBUG"
-				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 			/>
@@ -54,7 +53,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="_DEBUG"
-				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 			/>
