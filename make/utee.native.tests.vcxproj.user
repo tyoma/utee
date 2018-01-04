@@ -4,6 +4,6 @@
     <LocalDebuggerCommandArguments>$(TargetPath)</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>$(TargetDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommand>$(SolutionDir)_bin\Release_$(PlatformName)\utee-runner.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(TestRunnerExe)</LocalDebuggerCommand>
   </PropertyGroup>
 </Project>
