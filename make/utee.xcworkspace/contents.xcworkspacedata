@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:utee-tests.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:utee-runner.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:utee.xcodeproj">
+   </FileRef>
+</Workspace>

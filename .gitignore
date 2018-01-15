@@ -6,3 +6,4 @@
 *.suo
 *.ncb
 *.user
+.DS_Store
