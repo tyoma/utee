@@ -8,13 +8,6 @@
 #include <string>
 #include <vector>
 
-namespace std
-{
-   namespace tr1 { }
-
-   using namespace tr1; // To support MSVC 9.0
-}
-
 namespace ut
 {
    ///   @brief This interface is just a handle to init/term methods that are depending on a specific fixture type.
