@@ -245,7 +245,7 @@ namespace
          {
             m_ok = i_ok;
             if (!m_ok)
-               m_outcome.Format(_T("%s: %s"), i_outcomeTitle, i_outcomeMessage);
+               m_outcome.Format(_T("%s: %s"), (LPCTSTR)i_outcomeTitle, (LPCTSTR)i_outcomeMessage);
             else
                m_outcome = _T("&&&<>'");
          }
@@ -256,7 +256,7 @@ namespace
 
             ++(m_ok ? io_statistics.Passed : io_statistics.Failed);
             xml.Format(_T("<Leaf><Result exectime=\"0\" name=\"%s\" srcline=\"-1\" srcfile=\"\" message=\"%s\""
-               " fail=\"%s\" error=\"N\"/></Leaf>"), EscapeXML(m_name), EscapeXML(m_outcome), m_ok ? _T("N") : _T("Y"));
+               " fail=\"%s\" error=\"N\"/></Leaf>"), (LPCTSTR)EscapeXML(m_name), (LPCTSTR)EscapeXML(m_outcome), m_ok ? _T("N") : _T("Y"));
             return xml;
          }
 
@@ -292,7 +292,7 @@ namespace
 
             xml.Format(_T("<Node><ResultSet exectime=\"0\" nsucceeded=\"%d\" nerrors=\"0\" nfails=\"%d\" "
                "nresults=\"%d\" name=\"%s\"/>%s</Node>"), innerStatistics.Passed, innerStatistics.Failed,
-               innerStatistics.Passed + innerStatistics.Failed, EscapeXML(m_name), innerXml);
+               innerStatistics.Passed + innerStatistics.Failed, (LPCTSTR)EscapeXML(m_name), (LPCTSTR)innerXml);
             return xml;
          }
 
