@@ -19,7 +19,7 @@ namespace
 	template <typename MapT>
 	void load_test_cases(MapT &test_cases, module &m)
 	{
-		auto enumerator = m.address<EnumerateTestsF>("utee_enumerate_test_cases");
+		EnumerateTestsF enumerator = m.address<EnumerateTestsF>("utee_enumerate_test_cases");
 
 		enumerator(&test_cases, &accept_test_case<MapT>);
 	}

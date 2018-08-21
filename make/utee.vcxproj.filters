@@ -16,6 +16,9 @@
     <ClInclude Include="..\ut\registry.h">
       <Filter>Library Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ut\ptr.h">
+      <Filter>Library Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library Header Files">

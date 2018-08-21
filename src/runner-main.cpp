@@ -6,6 +6,7 @@
 #include <tchar.h>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <vector>
 
 using namespace std;

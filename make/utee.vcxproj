@@ -47,6 +47,7 @@
   <ItemGroup>
     <ClInclude Include="..\ut\assert.h" />
     <ClInclude Include="..\ut\exportable.h" />
+    <ClInclude Include="..\ut\ptr.h" />
     <ClInclude Include="..\ut\registry.h" />
     <ClInclude Include="..\ut\test.h" />
     <ClInclude Include="..\ut\test_case.h" />

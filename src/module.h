@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <stdexcept>
 
 namespace ut
@@ -8,16 +7,19 @@ namespace ut
 	class module
 	{
 	public:
-		module(const char *path);
+		explicit module(const char *path);
+		~module();
 
 		template <typename F>
 		F address(const char *name);
 
 	private:
+		module(const module &other);
+		const module &operator =(const module &rhs);
 		void *address(const char *name);
 
 	private:
-		std::shared_ptr<void> _module;
+		void *_module;
 	};
 
 

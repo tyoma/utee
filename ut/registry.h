@@ -4,7 +4,6 @@
 
 #include <functional>
 #include <map>
-#include <memory>
 #include <set>
 #include <string>
 #include <typeinfo>
@@ -22,17 +21,17 @@ namespace ut
    ///      methods. For a definition of a 'fixture', please, refer to http://en.wikipedia.org/wiki/Test_fixture
    class registry
    {
-      typedef std::map<const std::type_info *, std::shared_ptr<destructible>, type_info_less> _setups_map_t;
+      typedef std::map<const std::type_info *, shared_ptr<destructible>, type_info_less> _setups_map_t;
 
-      std::vector< std::shared_ptr<test_case> > m_test_cases;
+      std::vector< shared_ptr<test_case> > m_test_cases;
       std::set<std::string> m_registered_names;
       _setups_map_t m_setups;
 
       template <typename FixtureT>
-      std::shared_ptr< setup_impl<FixtureT> > get_setup();
+      shared_ptr< setup_impl<FixtureT> > get_setup();
 
    public:
-      typedef std::vector< std::shared_ptr<test_case> >::const_iterator const_iterator;
+      typedef std::vector< shared_ptr<test_case> >::const_iterator const_iterator;
 
    public:
 
@@ -69,7 +68,7 @@ namespace ut
 
 
    template <typename FixtureT>
-   inline std::shared_ptr< setup_impl< FixtureT > > registry::get_setup()
+   inline shared_ptr< setup_impl< FixtureT > > registry::get_setup()
    {
       typedef setup_impl<FixtureT> fixture_setup;
 
@@ -77,8 +76,8 @@ namespace ut
       _setups_map_t::const_iterator s = m_setups.find(t);
 
       s = s == m_setups.end() ?
-         m_setups.insert(std::make_pair(t, std::shared_ptr<destructible>(new fixture_setup))).first : s;
-      return std::shared_ptr<fixture_setup>( std::static_pointer_cast< fixture_setup >( s->second ) );
+         m_setups.insert(std::make_pair(t, shared_ptr<destructible>(new fixture_setup))).first : s;
+      return shared_ptr<fixture_setup>( static_pointer_cast< fixture_setup >( s->second ) );
    }
 
    template <typename FixtureT>
@@ -87,8 +86,8 @@ namespace ut
       typedef test_case_impl<FixtureT> test_case;
       typedef setup_impl<FixtureT> fixture_setup;
 
-      std::shared_ptr<fixture_setup> setup(get_setup<FixtureT>());
-      std::shared_ptr<test_case> tc(new test_case_impl<FixtureT>(method, name, setup));
+      shared_ptr<fixture_setup> setup(get_setup<FixtureT>());
+      shared_ptr<test_case> tc(new test_case_impl<FixtureT>(method, name, setup));
 
       if (m_registered_names.insert(std::string(tc->fixture_name().c_str()) + tc->name().c_str()).second)
          m_test_cases.push_back(tc);

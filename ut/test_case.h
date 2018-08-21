@@ -1,9 +1,9 @@
 #pragma once
 
 #include "exportable.h"
+#include "ptr.h"
 
 #include <algorithm>
-#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -72,11 +72,11 @@ namespace ut
    {
       typedef void (Fixture::*_method_t)();
       typedef std::vector<_method_t> _methods_list_t;
-      typedef std::shared_ptr<_methods_list_t> _methods_ptr_t;
+      typedef shared_ptr<_methods_list_t> _methods_ptr_t;
 
       const _method_t m_method;
       const exportable::immutable_string m_name;
-      std::shared_ptr< setup_impl<Fixture> > m_setup;
+      shared_ptr< setup_impl<Fixture> > m_setup;
 
       const test_case_impl &operator =(const test_case_impl &rhs);
 
@@ -84,7 +84,7 @@ namespace ut
       typedef _method_t method_t;
 
    public:
-      test_case_impl(method_t method, const std::string &name, std::shared_ptr< setup_impl<Fixture> > setup);
+      test_case_impl(method_t method, const std::string &name, shared_ptr< setup_impl<Fixture> > setup);
 
       virtual exportable::immutable_string fixture_name() const;
       virtual exportable::immutable_string name() const;
@@ -107,7 +107,7 @@ namespace ut
 
    template <typename Fixture>
    inline test_case_impl<Fixture>::test_case_impl(method_t method, const std::string &name,
-      std::shared_ptr< setup_impl<Fixture> > setup)
+      shared_ptr< setup_impl<Fixture> > setup)
       : m_method(method), m_name(name), m_setup(setup)
    {	}
 
