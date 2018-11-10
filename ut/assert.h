@@ -9,129 +9,131 @@ namespace ut
 {
 	class LocationInfo
 	{
-		const LocationInfo &operator =(const LocationInfo &rhs);
-
 	public:
-		LocationInfo(const std::string &i_filename, int i_line);
+		LocationInfo(const std::string &filename_, int line_);
 
 		const std::string filename;
 		const int line;
+
+	private:
+		const LocationInfo &operator =(const LocationInfo &rhs);
 	};
 
 	class FailedAssertion : public std::logic_error
 	{
-		static std::string ComposeMessage(const std::string &message, const LocationInfo &i_location);
-
 	public:
-		FailedAssertion(const std::string &message, const LocationInfo &i_location);
+		FailedAssertion(const std::string &message, const LocationInfo &location_);
 		virtual ~FailedAssertion() throw();
 
 		LocationInfo location;
+
+	private:
+		static std::string ComposeMessage(const std::string &message, const LocationInfo &location_);
 	};
 
 
 	template <typename T1, typename T2>
-	inline void are_equal(const T1 &i_lhs, const T2 &i_rhs, const LocationInfo &i_location)
+	inline void are_equal(const T1 &expected, const T2 &actual, const LocationInfo &location)
 	{
-		if (!(i_lhs == i_rhs))
-			throw FailedAssertion("Values are not equal!", i_location);
+		if (!(expected == actual))
+			throw FailedAssertion("Values are not equal!", location);
 	}
 
 	template <typename T, size_t n, typename ContainerT>
-	inline void are_equal(T (&i_lhs)[n], const ContainerT &i_rhs, const LocationInfo &i_location)
+	inline void are_equal(T (&expected)[n], const ContainerT &actual, const LocationInfo &location)
 	{
-		are_equal(n, static_cast<size_t>(std::distance(i_rhs.begin(), i_rhs.end())), i_location);
-		is_true(std::equal(i_lhs, i_lhs + n, i_rhs.begin()), i_location);
+		are_equal(n, static_cast<size_t>(std::distance(actual.begin(), actual.end())), location);
+		is_true(std::equal(expected, expected + n, actual.begin()), location);
 	}
 
 	template <typename T, size_t n>
-	inline void are_equal(const T (&i_lhs)[n], const std::basic_string<T> &i_rhs, const LocationInfo &i_location)
+	inline void are_equal(const T (&expected)[n], const std::basic_string<T> &actual, const LocationInfo &location)
 	{
-		if (!(i_lhs == i_rhs))
-			throw FailedAssertion("Values are not equal!", i_location);
+		if (!(expected == actual))
+			throw FailedAssertion("Values are not equal!", location);
 	}
 
 	template <typename T1, typename T2, size_t n>
-	inline void are_equal(T1 (&i_lhs)[n], T2 (&i_rhs)[n], const LocationInfo &location)
+	inline void are_equal(T1 (&expected)[n], T2 (&actual)[n], const LocationInfo &location)
 	{
-		is_true(std::equal(i_lhs, i_lhs + n, i_rhs), location);
+		is_true(std::equal(expected, expected + n, actual), location);
 	}
 
 
 	template <typename T1, size_t n, typename T2>
-	inline void content_equal(T1 (&i_lhs)[n], const T2 &i_rhs, const LocationInfo &location)
-	{	are_equal(std::vector<typename T2::value_type>(i_lhs, i_lhs + n), i_rhs, location);	}
+	inline void content_equal(T1 (&expected)[n], const T2 &actual, const LocationInfo &location)
+	{	are_equal(std::vector<typename T2::value_type>(expected, expected + n), actual, location);	}
 
 	template <typename T1, typename T2, size_t n>
-	inline void content_equal(T1 (&i_lhs)[n], T2 (&i_rhs)[n], const LocationInfo &location)
-	{	are_equal(std::vector<T2>(i_lhs, i_lhs + n), std::vector<T2>(i_rhs, i_rhs + n), location);	}
+	inline void content_equal(T1 (&expected)[n], T2 (&actual)[n], const LocationInfo &location)
+	{	are_equal(std::vector<T2>(expected, expected + n), std::vector<T2>(actual, actual + n), location);	}
 
 	template <typename T1, typename T2>
-	inline void are_not_equal(const T1 &i_lhs, const T2 &i_rhs, const LocationInfo &i_location)
+	inline void are_not_equal(const T1 &expected, const T2 &actual, const LocationInfo &location)
 	{
-		if (!(i_lhs != i_rhs))
-			throw FailedAssertion("Values are equal!", i_location);
+		if (!(expected != actual))
+			throw FailedAssertion("Values are equal!", location);
 	}
 
 	template <typename T1, typename T2>
-	inline void are_equivalent(const T1& i_reference, const T2& i_actual, const LocationInfo &i_location)
+	inline void are_equivalent(const T1& expected, const T2& actual, const LocationInfo &location)
 	{
 		using namespace std;
 
-		vector<typename T1::value_type> reference(i_reference.begin(), i_reference.end());
-		vector<typename T2::value_type> actual(i_actual.begin(), i_actual.end());
+		vector<typename T1::value_type> reference(expected.begin(), expected.end());
+		vector<typename T2::value_type> actual_(actual.begin(), actual.end());
 
 		sort(reference.begin(), reference.end());
-		sort(actual.begin(), actual.end());
-		if (lexicographical_compare(reference.begin(), reference.end(), actual.begin(), actual.end())
-			!= lexicographical_compare(actual.begin(), actual.end(), reference.begin(), reference.end()))
-			throw FailedAssertion("The sets are not equivalent!", i_location);
+		sort(actual_.begin(), actual_.end());
+		if (lexicographical_compare(reference.begin(), reference.end(), actual_.begin(), actual_.end())
+			!= lexicographical_compare(actual_.begin(), actual_.end(), reference.begin(), reference.end()))
+			throw FailedAssertion("The sets are not equivalent!", location);
 	}
 
 	template <typename T1, size_t n, typename T2>
-	inline void are_equivalent(T1 (&i_reference)[n], const T2& i_actual, const LocationInfo &i_location)
+	inline void are_equivalent(T1 (&expected)[n], const T2& actual, const LocationInfo &location)
 	{
-		are_equivalent(std::vector<T1>(i_reference, i_reference + n), i_actual, i_location);
+		are_equivalent(std::vector<T1>(expected, expected + n), actual, location);
 	}
 
-	inline void is_true(bool i_value, const LocationInfo &i_location)
+	inline void is_true(bool value, const LocationInfo &location)
 	{
-		if (!i_value)
-			throw FailedAssertion("Value is not 'true'!", i_location);
+		if (!value)
+			throw FailedAssertion("Value is not 'true'!", location);
 	}
 
-	inline void is_false(bool i_value, const LocationInfo &i_location)
+	inline void is_false(bool value, const LocationInfo &location)
 	{
-		if (i_value)
-			throw FailedAssertion("Value is not 'false'!", i_location);
-	}
-
-	template <typename T>
-	inline void is_empty(const T& i_container, const LocationInfo &i_location)
-	{
-		if (!i_container.empty())
-			throw FailedAssertion("The container is not empty!", i_location);
+		if (value)
+			throw FailedAssertion("Value is not 'false'!", location);
 	}
 
 	template <typename T>
-	inline void is_null(const T &i_value, const LocationInfo &i_location)
+	inline void is_empty(const T& container, const LocationInfo &location)
 	{
-		if (!(i_value == NULL))
-			throw FailedAssertion("Value is not null!", i_location);
+		if (!container.empty())
+			throw FailedAssertion("The container is not empty!", location);
 	}
 
 	template <typename T>
-	inline void is_not_null(const T &i_value, const LocationInfo &i_location)
+	inline void is_null(const T &value, const LocationInfo &location)
 	{
-		if (!(i_value != NULL))
-			throw FailedAssertion("Value is null!", i_location);
+		if (!(value == NULL))
+			throw FailedAssertion("Value is not null!", location);
+	}
+
+	template <typename T>
+	inline void is_not_null(const T &value, const LocationInfo &location)
+	{
+		if (!(value != NULL))
+			throw FailedAssertion("Value is null!", location);
 	}
 }
 
-#define assert_equal(_mp_lhs, _mp_rhs)  ut::are_equal(_mp_lhs, _mp_rhs, ut::LocationInfo(__FILE__, __LINE__))
-#define assert_content_equal(_mp_lhs, _mp_rhs)  ut::content_equal(_mp_lhs, _mp_rhs, ut::LocationInfo(__FILE__, __LINE__))
-#define assert_equivalent(_mp_reference, _mp_actual)  ut::are_equivalent(_mp_reference, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
-#define assert_not_equal(_mp_lhs, _mp_rhs)  ut::are_not_equal(_mp_lhs, _mp_rhs, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_equal(_mp_expected, _mp_actual)  ut::are_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_content_equal(_mp_expected, _mp_actual)  ut::content_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_equivalent(_mp_expected, _mp_actual)  ut::are_equivalent(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_not_equal(_mp_expected, _mp_actual)  ut::are_not_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_is_true(_mp_value)  ut::is_true(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_is_false(_mp_value)  ut::is_false(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_is_empty(_mp_container)  ut::is_empty(_mp_container, ut::LocationInfo(__FILE__, __LINE__))
