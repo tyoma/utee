@@ -59,6 +59,15 @@ namespace ut
 		is_true(std::equal(expected, expected + n, actual), location);
 	}
 
+	template <typename T>
+	inline void are_approx_equal(T reference, T actual, double tolerance, const LocationInfo &location)
+	{
+		const double e = 2 * static_cast<double>(reference - actual) / static_cast<double>(reference + actual);
+
+		if (e < -tolerance || tolerance < e)
+			throw FailedAssertion("Values are not approximately equal!", location);
+	}
+
 
 	template <typename T1, size_t n, typename T2>
 	inline void content_equal(T1 (&expected)[n], const T2 &actual, const LocationInfo &location)
@@ -131,6 +140,7 @@ namespace ut
 }
 
 #define assert_equal(_mp_expected, _mp_actual)  ut::are_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_approx_equal(_mp_expected, _mp_actual, _mp_tolerance) ut::are_approx_equal(_mp_expected, _mp_actual, _mp_tolerance, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_content_equal(_mp_expected, _mp_actual)  ut::content_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_equivalent(_mp_expected, _mp_actual)  ut::are_equivalent(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_not_equal(_mp_expected, _mp_actual)  ut::are_not_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
