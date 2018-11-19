@@ -46,6 +46,13 @@ namespace ut
 		is_true(std::equal(expected, expected + n, actual.begin()), location);
 	}
 
+	template <typename T, size_t n, typename ContainerT, typename PredicateT>
+	inline void are_equal(T (&expected)[n], const ContainerT &actual, PredicateT predicate, const LocationInfo &location)
+	{
+		are_equal(n, static_cast<size_t>(std::distance(actual.begin(), actual.end())), location);
+		is_true(std::equal(expected, expected + n, actual.begin(), predicate), location);
+	}
+
 	template <typename T, size_t n>
 	inline void are_equal(const T (&expected)[n], const std::basic_string<T> &actual, const LocationInfo &location)
 	{
@@ -57,6 +64,12 @@ namespace ut
 	inline void are_equal(T1 (&expected)[n], T2 (&actual)[n], const LocationInfo &location)
 	{
 		is_true(std::equal(expected, expected + n, actual), location);
+	}
+
+	template <typename T1, typename T2, size_t n, typename PredicateT>
+	inline void are_equal(T1 (&expected)[n], T2 (&actual)[n], PredicateT predicate, const LocationInfo &location)
+	{
+		is_true(std::equal(expected, expected + n, actual, predicate), location);
 	}
 
 	template <typename T>
@@ -140,6 +153,7 @@ namespace ut
 }
 
 #define assert_equal(_mp_expected, _mp_actual)  ut::are_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_equal_pred(_mp_expected, _mp_actual, _mp_pedicate)  ut::are_equal(_mp_expected, _mp_actual, _mp_pedicate, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_approx_equal(_mp_expected, _mp_actual, _mp_tolerance) ut::are_approx_equal(_mp_expected, _mp_actual, _mp_tolerance, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_content_equal(_mp_expected, _mp_actual)  ut::content_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_equivalent(_mp_expected, _mp_actual)  ut::are_equivalent(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
