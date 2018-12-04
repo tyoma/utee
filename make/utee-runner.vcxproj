@@ -31,13 +31,17 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)build.props\platform.props" />
   <PropertyGroup Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType Condition="'$(Platform)'!='Android'">Application</ConfigurationType>
+    <ConfigurationType Condition="'$(Platform)'=='Android'">DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="PropertySheets">
     <Import Project="$(SolutionDir)build.props\config.props" Condition="exists('$(SolutionDir)build.props\config.props')" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <PropertyGroup Condition="'$(Platform)'=='Android'">
+    <TargetExt>.</TargetExt>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -45,10 +49,21 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <NoExecStack Condition="'$(Platform)'=='Android'">false</NoExecStack>
+      <GenerateSharedLibrary Condition="'$(Platform)'=='Android'">false</GenerateSharedLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\runner-main.cpp" />
+    <ClCompile Include="..\src\module.cpp" />
+    <ClCompile Include="..\src\runner-main.cpp">
+      <ExcludedFromBuild Condition="'$(Platform)'=='Android'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\src\runner.cpp">
+      <ExcludedFromBuild Condition="'$(Platform)'!='Android'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\module.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
