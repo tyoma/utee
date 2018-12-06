@@ -2,6 +2,7 @@
 
 #include <map>
 #include <iostream>
+#include <stdio.h>
 #include <ut/registry.h>
 #include <vector>
 
@@ -26,8 +27,10 @@ namespace
 }
 
 int main(int argc, const char *argv[])
-	try
+try
 {
+	setvbuf(stdout, NULL, _IONBF, 0);
+	
 	typedef vector<ut::test_case*> test_cases_t;
 	typedef map<string, test_cases_t> test_cases_map_t;
 
