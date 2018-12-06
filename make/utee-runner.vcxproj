@@ -51,6 +51,7 @@
       <SubSystem>Console</SubSystem>
       <NoExecStack Condition="'$(Platform)'=='Android'">false</NoExecStack>
       <GenerateSharedLibrary Condition="'$(Platform)'=='Android'">false</GenerateSharedLibrary>
+      <IgnoreAllDefaultLibraries Condition="'$(Platform)'=='Android'">false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
