@@ -9,7 +9,7 @@ using namespace std;
       #define EXPORTED __declspec(dllexport)
    #endif
 #else
-   #define EXPORTED
+	#define EXPORTED __attribute__((visibility("default")))
 #endif
 
 namespace ut
