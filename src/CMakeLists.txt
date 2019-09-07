@@ -1,6 +1,6 @@
 include_directories(..)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -frtti -fPIC")
 
 add_library(utee STATIC assert.cpp registry.cpp)
 add_executable(utee-runner module.cpp module.h runner.cpp)
