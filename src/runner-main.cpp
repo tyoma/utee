@@ -256,8 +256,8 @@ namespace
             CString xml;
 
             ++(m_ok ? io_statistics.Passed : io_statistics.Failed);
-            xml.Format(_T("<Leaf><Result exectime=\"0\" name=\"%s\" srcline=\"-1\" srcfile=\"\" message=\"%s\""
-               " fail=\"%s\" error=\"N\"/></Leaf>"), (LPCTSTR)EscapeXML(m_name), (LPCTSTR)EscapeXML(m_outcome), m_ok ? _T("N") : _T("Y"));
+            xml.Format(_T("<Leaf><Result exectime=\"0\" name=\"%s\" srcline=\"-1\" srcfile=\"\" message=\"%s\" fail=\"%s\" error=\"N\"/></Leaf>"),
+               (LPCTSTR)EscapeXML(m_name), (LPCTSTR)EscapeXML(m_outcome), m_ok ? _T("N") : _T("Y"));
             return xml;
          }
 
@@ -291,9 +291,9 @@ namespace
             io_statistics.Passed += innerStatistics.Passed;
             io_statistics.Failed += innerStatistics.Failed;
 
-            xml.Format(_T("<Node><ResultSet exectime=\"0\" nsucceeded=\"%d\" nerrors=\"0\" nfails=\"%d\" "
-               "nresults=\"%d\" name=\"%s\"/>%s</Node>"), innerStatistics.Passed, innerStatistics.Failed,
-               innerStatistics.Passed + innerStatistics.Failed, (LPCTSTR)EscapeXML(m_name), (LPCTSTR)innerXml);
+            xml.Format(_T("<Node><ResultSet exectime=\"0\" nsucceeded=\"%d\" nerrors=\"0\" nfails=\"%d\" nresults=\"%d\" name=\"%s\"/>%s</Node>"),
+               innerStatistics.Passed, innerStatistics.Failed, innerStatistics.Passed + innerStatistics.Failed,
+               (LPCTSTR)EscapeXML(m_name), (LPCTSTR)innerXml);
             return xml;
          }
 
