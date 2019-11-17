@@ -103,9 +103,6 @@
 			RelativePath="..\tests\main.cpp">
 		</File>
 		<File
-			RelativePath="..\tests\MiscTests.cpp">
-		</File>
-		<File
 			RelativePath="..\tests\TestCaseTests.cpp">
 		</File>
 		<File

@@ -66,6 +66,11 @@ public:
 
 #include "registry.h"
 
+#define __tokenliteral(x) #x
+#define __tokenliteral2(x) __tokenliteral(x)
+#define __tokenpaste(x, y) x ## y
+#define __tokenpaste2(x, y) __tokenpaste(x, y)
+
 namespace ut
 {
 	registry &registry_instance();
@@ -115,7 +120,9 @@ class __test_suite\
 	typedef __test_suite this_suite_class;\
 public:\
 	static const char *__suite_name()\
-	{	return #__test_suite;	}
+	{	return #__test_suite;	}\
+	static std::string __suite_id()\
+	{	return std::string(__FILE__) + std::string(__tokenliteral2(__LINE__)) + std::string(__tokenliteral2(__test_suite));	}
 
 #define init(__test_init)\
 	static void (this_suite_class::*__##__test_init##_meta())()\
@@ -139,9 +146,6 @@ public:\
 	void __test()
 
 #define obsolete_test(__test)
-
-#define __tokenpaste(x, y) x ## y
-#define __tokenpaste2(x, y) __tokenpaste(x, y)
 
 #define end_test_suite\
  } static __tokenpaste2(g_suite, __LINE__);

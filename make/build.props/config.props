@@ -6,10 +6,9 @@
     <OutDir>$(SolutionDir)_bin\$(Configuration)_$(PlatformName)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <ClCompile>
-      <AdditionalOptions Condition="'$(Platform)'=='Android'">-std=c++11 -fexceptions %(AdditionalOptions)</AdditionalOptions>
-      <RuntimeTypeInfo Condition="'$(Platform)'=='Android'">true</RuntimeTypeInfo>
-    </ClCompile>
+    <Link>
+		<GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="$(Configuration.StartsWith('Debug'))">
     <ClCompile>

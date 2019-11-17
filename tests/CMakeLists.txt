@@ -1,5 +1,4 @@
 set(UTEE_TEST_SOURCES
-	MiscTests.cpp
 	TestCaseTests.cpp
 	TestExecutionEngineTests.cpp
 )

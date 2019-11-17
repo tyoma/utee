@@ -6,22 +6,16 @@
 #include <map>
 #include <set>
 #include <string>
-#include <typeinfo>
 #include <vector>
 
 namespace ut
 {
-   struct type_info_less : std::binary_function<const std::type_info *, const std::type_info *, bool>
-   {
-      bool operator ()(const std::type_info *lhs, const std::type_info *rhs) const;
-   };
-
    ///   @brief This is a central registry for unit tests based on this famework. It supports adding non-static test
    ///      methods from fixtures (tests cannot go outside of any fixture), as well as initialization and teardown
    ///      methods. For a definition of a 'fixture', please, refer to http://en.wikipedia.org/wiki/Test_fixture
    class registry
    {
-      typedef std::map<const std::type_info *, shared_ptr<destructible>, type_info_less> _setups_map_t;
+      typedef std::map<std::string /*suite_id*/, shared_ptr<destructible> /*setup*/> _setups_map_t;
 
       std::vector< shared_ptr<test_case> > m_test_cases;
       std::set<std::string> m_registered_names;
@@ -60,23 +54,16 @@ namespace ut
 
 
 
-   inline bool type_info_less::operator ()(const std::type_info *lhs, const std::type_info *rhs) const
-   {
-      return !!lhs->before(*rhs);
-   }
-
-
-
    template <typename FixtureT>
    inline shared_ptr< setup_impl< FixtureT > > registry::get_setup()
    {
       typedef setup_impl<FixtureT> fixture_setup;
 
-      const std::type_info *t = &typeid(FixtureT);
-      _setups_map_t::const_iterator s = m_setups.find(t);
+		const std::string id = FixtureT::__suite_id();
+      _setups_map_t::const_iterator s = m_setups.find(id);
 
       s = s == m_setups.end() ?
-         m_setups.insert(std::make_pair(t, shared_ptr<destructible>(new fixture_setup))).first : s;
+         m_setups.insert(std::make_pair(id, shared_ptr<destructible>(new fixture_setup))).first : s;
       return shared_ptr<fixture_setup>( static_pointer_cast< fixture_setup >( s->second ) );
    }
 

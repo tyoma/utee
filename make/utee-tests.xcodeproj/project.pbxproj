@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A08B5914200D531900EB0790 /* helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = A08B5910200D531800EB0790 /* helpers.h */; };
 		A08B5915200D531900EB0790 /* TestExecutionEngineTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A08B5911200D531800EB0790 /* TestExecutionEngineTests.cpp */; };
-		A08B5916200D531900EB0790 /* MiscTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A08B5912200D531900EB0790 /* MiscTests.cpp */; };
 		A08B5917200D531900EB0790 /* TestCaseTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A08B5913200D531900EB0790 /* TestCaseTests.cpp */; };
 		A08B5919200D533800EB0790 /* libutee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A08B591A200D533800EB0790 /* libutee.a */; };
 /* End PBXBuildFile section */
@@ -18,7 +17,6 @@
 		A08B5909200D52D600EB0790 /* libutee-tests.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libutee-tests.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08B5910200D531800EB0790 /* helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helpers.h; path = ../tests/helpers.h; sourceTree = "<group>"; };
 		A08B5911200D531800EB0790 /* TestExecutionEngineTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestExecutionEngineTests.cpp; path = ../tests/TestExecutionEngineTests.cpp; sourceTree = "<group>"; };
-		A08B5912200D531900EB0790 /* MiscTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MiscTests.cpp; path = ../tests/MiscTests.cpp; sourceTree = "<group>"; };
 		A08B5913200D531900EB0790 /* TestCaseTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestCaseTests.cpp; path = ../tests/TestCaseTests.cpp; sourceTree = "<group>"; };
 		A08B591A200D533800EB0790 /* libutee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libutee.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -39,7 +37,6 @@
 			isa = PBXGroup;
 			children = (
 				A08B5910200D531800EB0790 /* helpers.h */,
-				A08B5912200D531900EB0790 /* MiscTests.cpp */,
 				A08B5913200D531900EB0790 /* TestCaseTests.cpp */,
 				A08B5911200D531800EB0790 /* TestExecutionEngineTests.cpp */,
 				A08B590A200D52D600EB0790 /* Products */,
@@ -131,7 +128,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A08B5915200D531900EB0790 /* TestExecutionEngineTests.cpp in Sources */,
-				A08B5916200D531900EB0790 /* MiscTests.cpp in Sources */,
 				A08B5917200D531900EB0790 /* TestCaseTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,6 +18,7 @@ namespace ut
 			{
 			public:
 				static const char *__suite_name() {	return "TestClass1";	}
+				static const char *__suite_id() {	return "abc";	}
 
 				void foo()
 				{
@@ -33,6 +34,7 @@ namespace ut
 			{
 			public:
 				static const char *__suite_name() {	return "TestClass2";	}
+				static const char *__suite_id() {	return "abc1";	}
 
 				void foo()
 				{
@@ -44,6 +46,7 @@ namespace ut
 			{
 			public:
 				static const char *__suite_name() {	return "TestClass3";	}
+				static const char *__suite_id() {	return "xyz";	}
 
 				void foo()
 				{
