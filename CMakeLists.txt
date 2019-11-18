@@ -13,4 +13,6 @@ add_compile_options("$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-fP
 add_definitions(-D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS)
 
 add_subdirectory(src)
-add_subdirectory(tests)
+if (NOT UTEE_NO_TESTS)
+	add_subdirectory(tests)
+endif()
