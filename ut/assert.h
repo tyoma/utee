@@ -32,6 +32,19 @@ namespace ut
 	};
 
 
+	template <typename T>
+	struct remove_const
+	{	typedef T type;	};
+
+	template <typename T>
+	struct remove_const<const T>
+	{	typedef typename remove_const<T>::type type;	};
+
+	template <typename T1, typename T2>
+	struct remove_const< std::pair<T1, T2> >
+	{	typedef std::pair<typename remove_const<T1>::type, typename remove_const<T2>::type> type;	};
+
+
 	template <typename T1, typename T2>
 	inline void are_equal(const T1 &expected, const T2 &actual, const LocationInfo &location)
 	{
@@ -62,15 +75,11 @@ namespace ut
 
 	template <typename T1, typename T2, size_t n>
 	inline void are_equal(T1 (&expected)[n], T2 (&actual)[n], const LocationInfo &location)
-	{
-		is_true(std::equal(expected, expected + n, actual), location);
-	}
+	{	is_true(std::equal(expected, expected + n, actual), location);	}
 
 	template <typename T1, typename T2, size_t n, typename PredicateT>
 	inline void are_equal(T1 (&expected)[n], T2 (&actual)[n], PredicateT predicate, const LocationInfo &location)
-	{
-		is_true(std::equal(expected, expected + n, actual, predicate), location);
-	}
+	{	is_true(std::equal(expected, expected + n, actual, predicate), location);	}
 
 	template <typename T>
 	inline void are_approx_equal(T reference, T actual, double tolerance, const LocationInfo &location)
@@ -102,8 +111,8 @@ namespace ut
 	{
 		using namespace std;
 
-		vector<typename T1::value_type> reference(expected.begin(), expected.end());
-		vector<typename T2::value_type> actual_(actual.begin(), actual.end());
+		vector<typename ut::remove_const<typename T1::value_type>::type> reference(expected.begin(), expected.end());
+		vector<typename ut::remove_const<typename T2::value_type>::type> actual_(actual.begin(), actual.end());
 
 		sort(reference.begin(), reference.end());
 		sort(actual_.begin(), actual_.end());
@@ -114,9 +123,7 @@ namespace ut
 
 	template <typename T1, size_t n, typename T2>
 	inline void are_equivalent(T1 (&expected)[n], const T2& actual, const LocationInfo &location)
-	{
-		are_equivalent(std::vector<T1>(expected, expected + n), actual, location);
-	}
+	{	are_equivalent(std::vector<T1>(expected, expected + n), actual, location);	}
 
 	inline void is_true(bool value, const LocationInfo &location)
 	{

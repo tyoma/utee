@@ -40,6 +40,8 @@ namespace ut
 		friend shared_ptr<U, Counter2T> static_pointer_cast(const shared_ptr<V, Counter2T> &from);
 	};
 
+
+
 	template <typename T, typename CounterT>
 	inline shared_ptr<T, CounterT>::shared_ptr(T *p)
 		: _ptr(p), _refcount(new CounterT(1))
@@ -77,6 +79,7 @@ namespace ut
 	template <typename T, typename CounterT>
 	inline void shared_ptr<T, CounterT>::reset() throw()
 	{
+		enum {	unused = sizeof(T)	};
 		if (_refcount && !--*_refcount)
 			delete _ptr, delete _refcount;
 		_ptr = 0, _refcount = 0;
