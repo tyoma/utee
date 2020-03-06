@@ -51,11 +51,19 @@ public ref class __test_suite\
 {\
 public:
 
+#define init(__test_init)\
+	[Microsoft::VisualStudio::TestTools::UnitTesting::TestInitialize]\
+	void __test_init()
+
+#define teardown(__test_tdwn)\
+	[Microsoft::VisualStudio::TestTools::UnitTesting::TestCleanup]\
+	void __test_tdwn()
+
 #define test(__test)\
 	[Microsoft::VisualStudio::TestTools::UnitTesting::TestMethod]\
 	void __test()
 
-#define ignore(__test)\
+#define ignored_test(__test)\
 	void __test()
 
 #define obsolete_test(__test)
