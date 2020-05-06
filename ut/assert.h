@@ -52,6 +52,13 @@ namespace ut
 			throw FailedAssertion("Values are not equal!", location);
 	}
 
+	template <typename T1, typename T2, typename PredicateT>
+	inline void are_equal(const T1 &expected, const T2 &actual, PredicateT predicate, const LocationInfo &location)
+	{
+		if (!predicate(expected, actual))
+			throw FailedAssertion("Values are not equal!", location);
+	}
+
 	template <typename T, size_t n, typename ContainerT>
 	inline void are_equal(T (&expected)[n], const ContainerT &actual, const LocationInfo &location)
 	{
