@@ -128,8 +128,9 @@ namespace ut
 				// ACT / ASSERT (must compile)
 				test_case &tc_ft = ft;
 				test_case &tc_bt = bt;
-
-				tc_ft, tc_bt;
+				
+				// ASSERT
+				assert_not_equal(&tc_ft, &tc_bt);
 			}
 
 

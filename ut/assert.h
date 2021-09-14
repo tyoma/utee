@@ -12,11 +12,9 @@ namespace ut
 	public:
 		LocationInfo(const std::string &filename_, int line_);
 
-		const std::string filename;
-		const int line;
-
-	private:
-		const LocationInfo &operator =(const LocationInfo &rhs);
+	public:
+		std::string filename;
+		int line;
 	};
 
 	class FailedAssertion : public std::logic_error
