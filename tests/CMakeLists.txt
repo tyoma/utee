@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.13)
+
 set(UTEE_TEST_SOURCES
 	TestCaseTests.cpp
 	TestExecutionEngineTests.cpp
