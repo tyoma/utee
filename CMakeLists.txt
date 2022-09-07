@@ -11,7 +11,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/make/build.prop
 
 include(utee-test)
 
-add_compile_options("$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-g;-fPIC>")
+add_compile_options("$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-g;-fPIC>")
 add_definitions(-D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS)
 
 add_subdirectory(src)
