@@ -126,6 +126,21 @@ namespace ut
 			throw FailedAssertion("The sets are not equivalent!", location);
 	}
 
+	template <typename T1, typename T2, typename PredicateT>
+	inline void are_equivalent(const T1& expected, const T2& actual, PredicateT less, const LocationInfo &location)
+	{
+		using namespace std;
+
+		vector<typename ut::remove_const<typename T1::value_type>::type> reference(expected.begin(), expected.end());
+		vector<typename ut::remove_const<typename T2::value_type>::type> actual_(actual.begin(), actual.end());
+
+		sort(reference.begin(), reference.end(), less);
+		sort(actual_.begin(), actual_.end(), less);
+		if (lexicographical_compare(reference.begin(), reference.end(), actual_.begin(), actual_.end(), less)
+			!= lexicographical_compare(actual_.begin(), actual_.end(), reference.begin(), reference.end(), less))
+			throw FailedAssertion("The sets are not equivalent!", location);
+	}
+
 	template <typename T1, size_t n, typename T2>
 	inline void are_equivalent(T1 (&expected)[n], const T2& actual, const LocationInfo &location)
 	{	are_equivalent(std::vector<T1>(expected, expected + n), actual, location);	}
@@ -169,6 +184,7 @@ namespace ut
 #define assert_approx_equal(_mp_expected, _mp_actual, _mp_tolerance) ut::are_approx_equal(_mp_expected, _mp_actual, _mp_tolerance, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_content_equal(_mp_expected, _mp_actual)  ut::content_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_equivalent(_mp_expected, _mp_actual)  ut::are_equivalent(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
+#define assert_equivalent_pred(_mp_expected, _mp_actual, _mp_predicate)  ut::are_equivalent(_mp_expected, _mp_actual, _mp_predicate, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_not_equal(_mp_expected, _mp_actual)  ut::are_not_equal(_mp_expected, _mp_actual, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_is_true(_mp_value)  ut::is_true(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
 #define assert_is_false(_mp_value)  ut::is_false(_mp_value, ut::LocationInfo(__FILE__, __LINE__))
