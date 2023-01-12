@@ -21,6 +21,7 @@ namespace ut
 	{
 	public:
 		test_result(bool i_initialized, bool i_passed, bool i_terminated, const std::string& i_outcome);
+        test_result(const test_result &other);
 
 		const bool initialized : 1;
 		const bool passed : 1;
@@ -104,6 +105,10 @@ namespace ut
 	inline test_result::test_result(bool i_initialized, bool i_passed, bool i_terminated, const std::string& i_outcome)
 		: initialized(i_initialized), passed(i_passed), terminated(i_terminated), outcome(i_outcome)
 	{	}
+
+	inline test_result::test_result(const test_result &other)
+		: initialized(other.initialized), passed(other.passed), terminated(other.terminated), outcome(other.outcome)
+	{   }
 
 
 	template <typename Fixture>
